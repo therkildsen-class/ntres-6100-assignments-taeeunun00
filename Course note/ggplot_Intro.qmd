@@ -1,0 +1,18 @@
+---
+title: Quarto
+format: html
+---
+
+# Quarto
+
+```{r}
+#| message: true
+library(tidyverse)
+```
+
+Let's ecplore data visualization options
+
+```{r}
+cars
+view(cars)
+```
