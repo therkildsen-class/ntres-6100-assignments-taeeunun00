@@ -16,3 +16,18 @@ Let's ecplore data visualization options
 cars
 view(cars)
 ```
+
+```{r fig.height=5, fig.width=10}
+ggplot(data=mpg, mapping=aes(x=displ, y= hwy))+
+  geom_point(mapping=aes(color=class, size=cyl), shape =1)+
+  geom_smooth()+
+  facet_wrap(~year, nrow=1)
+
+```
+
+```{r}
+ggplot(data=mpg, mapping=aes(x=displ, y= hwy))+
+  geom_point(mapping=aes(color=class, size=cyl), shape =1)+
+  geom_smooth()+
+  facet_wrap(~year, nrow=1)
+```

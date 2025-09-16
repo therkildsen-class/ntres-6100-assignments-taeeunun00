@@ -113,23 +113,94 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 </div>
+<p>Let’s ecplore data visualization options</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cars</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 234 × 11
-   manufacturer model      displ  year   cyl trans drv     cty   hwy fl    class
-   &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
- 1 audi         a4           1.8  1999     4 auto… f        18    29 p     comp…
- 2 audi         a4           1.8  1999     4 manu… f        21    29 p     comp…
- 3 audi         a4           2    2008     4 manu… f        20    31 p     comp…
- 4 audi         a4           2    2008     4 auto… f        21    30 p     comp…
- 5 audi         a4           2.8  1999     6 auto… f        16    26 p     comp…
- 6 audi         a4           2.8  1999     6 manu… f        18    26 p     comp…
- 7 audi         a4           3.1  2008     6 auto… f        18    27 p     comp…
- 8 audi         a4 quattro   1.8  1999     4 manu… 4        18    26 p     comp…
- 9 audi         a4 quattro   1.8  1999     4 auto… 4        16    25 p     comp…
-10 audi         a4 quattro   2    2008     4 manu… 4        20    28 p     comp…
-# ℹ 224 more rows</code></pre>
+<pre><code>   speed dist
+1      4    2
+2      4   10
+3      7    4
+4      7   22
+5      8   16
+6      9   10
+7     10   18
+8     10   26
+9     10   34
+10    11   17
+11    11   28
+12    12   14
+13    12   20
+14    12   24
+15    12   28
+16    13   26
+17    13   34
+18    13   34
+19    13   46
+20    14   26
+21    14   36
+22    14   60
+23    14   80
+24    15   20
+25    15   26
+26    15   54
+27    16   32
+28    16   40
+29    17   32
+30    17   40
+31    17   50
+32    18   42
+33    18   56
+34    18   76
+35    18   84
+36    19   36
+37    19   46
+38    19   68
+39    20   32
+40    20   48
+41    20   52
+42    20   56
+43    20   64
+44    22   66
+45    23   54
+46    24   70
+47    24   92
+48    24   93
+49    24  120
+50    25   85</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(cars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>mpg, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>displ, <span class="at">y=</span> hwy))<span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">color=</span>class, <span class="at">size=</span>cyl), <span class="at">shape =</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()<span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>year, <span class="at">nrow=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess' and formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ggplot_Intro_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>mpg, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>displ, <span class="at">y=</span> hwy))<span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">color=</span>class, <span class="at">size=</span>cyl), <span class="at">shape =</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()<span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>year, <span class="at">nrow=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess' and formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ggplot_Intro_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
