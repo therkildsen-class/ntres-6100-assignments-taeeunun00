@@ -12,8 +12,8 @@ Please use the following table to grade the student's assignment:
 
 | Assignment# | Fully completed | Partially completed | Not completed |
 |:-----------:|:---------------:|:-------------------:|:-------------:|
-|      1      |        X         |                     |               |
-|      2      |        X         |                     |               |
+|      1      |        X        |                     |               |
+|      2      |        X        |                     |               |
 |      3      |                 |                     |               |
 |      4      |                 |                     |               |
 |      5      |                 |                     |               |
@@ -27,3 +27,5 @@ Assignment 2: <https://github.com/taeeunun00/Assignment_2.git>
 -   This repository contains files from the previous assignment and lab exercise. The "Assignment_1.qmd" file is a Quarto template assignment that was due last week. The "Penguin_Exercise.qmd" file is a lab exercise using Quarto to create a website. This file includes practice with adding text, images, and code chunks, as well as exploring the "penguins" dataset with ggplot. Lastly, "Images_for_penguin_exercise" is a folder containing three image files that were used for the Quarto website exercise. The images are organized here to keep the project structure clean!
 
 Assignment 3: <https://taeeunun00.github.io/assignment-3-tc775/>
+
+Assignment 4:
