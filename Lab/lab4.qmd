@@ -38,3 +38,45 @@ gapminder |>
   geom_point(mapping=aes(y=fertility, x=gdp/population, color = continent)) +
   facet_wrap(~continent)
   
+  
+gapminder |>
+  filter(year == "2015") |>
+  arrange (-population) |>
+  select (country) |>
+  head (5)
+  Pull ()
+  
+top_5_countries <- gapminder |>
+  filter(year == "2015") |>
+  arrange (-population) |>
+  select (country) |>
+  head (5) |>
+  pull()
+
+gapminder |>
+  filter(year == "2015") |>
+  arrange (-population) |>
+  select (country) |>
+  head (5) |>
+  pull()
+  
+  
+gapminder |>
+filter (country %in% top_5_countries) |>
+select (country, year, population) |>
+ggplot () +
+geom_line(mapping=aes(x=year, y=population, color = country))
+
+gapminder |>
+filter (year == "2015", country %in% c("Turkey", "Poland", "South Korea", "Russia", "Vietnam", "South Africa")) |>
+arrange (infant_mortality) |>
+select (country, infant_mortality)
+  
+
+gapminder |>
+filter (year == "2000") |>
+select (gdp, fertility, population) |>
+ggplot() +
+geom_point(mapping = aes(x=gdp/population, y=fertility))
+  
+  
