@@ -3,20 +3,6 @@
 
 ``` r
 library(tidyverse)
-```
-
-    ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ✔ ggplot2   3.5.2     ✔ tibble    3.3.0
-    ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ✔ purrr     1.1.0     
-    ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ✖ dplyr::filter() masks stats::filter()
-    ✖ dplyr::lag()    masks stats::lag()
-    ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-``` r
 library(knitr)
 ```
 
@@ -35,15 +21,6 @@ First, we load the data using the following code.
 ``` r
 economist_data <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/EconomistData.csv")
 ```
-
-    New names:
-    Rows: 173 Columns: 6
-    ── Column specification
-    ──────────────────────────────────────────────────────── Delimiter: "," chr
-    (2): Country, Region dbl (4): ...1, HDI.Rank, HDI, CPI
-    ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-    Specify the column types or set `show_col_types = FALSE` to quiet this message.
-    • `` -> `...1`
 
 #### **1.1 Show the first few rows of `economist_data`**.
 
@@ -109,8 +86,6 @@ economist_data |>
   geom_smooth(mapping=aes(x=CPI, y=HDI))
 ```
 
-    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
-
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-8-1.png)
 
 #### **1.7 Fit a separate straight line for each region instead, and turn off the confidence interval.**
@@ -119,10 +94,8 @@ economist_data |>
 economist_data |>
   ggplot() +
   geom_point(mapping=aes(x=CPI, y=HDI, color=Region)) +
-  geom_smooth(mapping=aes(x=CPI, y=HDI, color=Region))
+  geom_line(mapping=aes(x=CPI, y=HDI, color=Region))
 ```
-
-    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-9-1.png)
 
@@ -132,11 +105,9 @@ economist_data |>
 economist_data |>
   ggplot() +
   geom_point(mapping=aes(x=CPI, y=HDI, color=Region)) +
-  geom_smooth(mapping=aes(x=CPI, y=HDI, color=Region)) +
+  geom_line(mapping=aes(x=CPI, y=HDI, color=Region)) +
   facet_wrap(~Region)
 ```
-
-    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-10-1.png)
 
@@ -160,8 +131,6 @@ economist_data |>
   facet_wrap(~Region) +
   labs (x="HDI", y="count")
 ```
-
-    `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-12-1.png)
 
@@ -191,7 +160,32 @@ economist_data |>
 
 #### **1.13 You have now created a variety of different plots of the same dataset. Which of your plots do you think are the most informative? Describe briefly the major trends that you see in the data.**
 
-Answer: *Write your response here*.
+Answer: I find the plot in 1.8 to be the most informative. The earlier
+plots, such as 1.2 and 1.3, only show a limited amount of information
+and therefore do not reveal much about the data. Plot 1.4 colors the
+points by region, but because the points are quite small and there are
+many colors, it becomes difficult to distinguish between regions. Plot
+1.5 adds another layer of information with point size, but the variation
+in size does not clearly communicate the differences, which makes
+interpretation harder. Plot 1.6 is more useful than 1.4, since the
+smoothing line highlights the major trends, but the small point size and
+the number of colors still make it difficult to see regional differences
+and also give the plot a cluttered appearance. Plot 1.7, meanwhile, is
+visually too complex.
+
+By contrast, plot 1.8 strikes a good balance: the combination of points
+and fitted lines makes the overall trends clear, and separating the
+regions into six panels makes it much easier to interpret patterns
+within each region. The only drawback is that splitting into six panels
+makes it harder to see the overall global trend at a glance, but using
+plots 1.6 and 1.8 together could address this by showing both the
+overall and the region-specific patterns.
+
+As for the major trends, the plots suggest a positive relationship
+between CPI and HDI across most regions—countries with higher CPI scores
+tend to also have higher HDI scores. However, the strength and shape of
+this relationship vary by region, which becomes especially clear in the
+faceted plot in 1.8.
 
 ## **Exercise 2. Theophylline experiment**
 
@@ -336,45 +330,3 @@ Theoph |>
 | 2       |  4.823636 |    48.40 |
 | 4       |  4.940000 |    48.40 |
 | 8       |  4.271818 |    49.83 |
-
-## **Exercise 3. Unemployment in the US 1967-2015 (OPTIONAL)**
-
-This excercise uses the dataset `economics` from the ggplot2 package. It
-was produced from US economic time series data available from
-<http://research.stlouisfed.org/fred2>. It descibes the number of
-unemployed persons (`unemploy`), among other variables, in the US from
-1967 to 2015.
-
-``` r
-head(economics) %>% kable()
-```
-
-| date       |   pce |    pop | psavert | uempmed | unemploy |
-|:-----------|------:|-------:|--------:|--------:|---------:|
-| 1967-07-01 | 506.7 | 198712 |    12.6 |     4.5 |     2944 |
-| 1967-08-01 | 509.8 | 198911 |    12.6 |     4.7 |     2945 |
-| 1967-09-01 | 515.6 | 199113 |    11.9 |     4.6 |     2958 |
-| 1967-10-01 | 512.2 | 199311 |    12.9 |     4.9 |     3143 |
-| 1967-11-01 | 517.4 | 199498 |    12.8 |     4.7 |     3066 |
-| 1967-12-01 | 525.1 | 199657 |    11.8 |     4.8 |     3018 |
-
-| **date**   | **pce** | **pop** | **psavert** | **uempmed** | **unemploy** |
-|------------|---------|---------|-------------|-------------|--------------|
-| 1967-07-01 | 506.7   | 198712  | 12.6        | 4.5         | 2944         |
-| 1967-08-01 | 509.8   | 198911  | 12.6        | 4.7         | 2945         |
-| 1967-09-01 | 515.6   | 199113  | 11.9        | 4.6         | 2958         |
-| 1967-10-01 | 512.2   | 199311  | 12.9        | 4.9         | 3143         |
-| 1967-11-01 | 517.4   | 199498  | 12.8        | 4.7         | 3066         |
-| 1967-12-01 | 525.1   | 199657  | 11.8        | 4.8         | 3018         |
-
-#### **3.1 Plot the trend in number of unemployed persons (`unemploy`) though time using the economics dataset shown above. And for this question only, hide your code and only show the plot.**
-
-``` r
-## Write your code here
-```
-
-#### **3.2 Edit the plot title and axis labels of the previous plot appropriately. Make y axis start from 0. Change the background theme to what is shown below. (Hint: search for help online if needed)**
-
-``` r
-## Write your code here
-```
