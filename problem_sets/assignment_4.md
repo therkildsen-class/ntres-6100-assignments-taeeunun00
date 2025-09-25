@@ -92,10 +92,12 @@ economist_data |>
 
 ``` r
 economist_data |>
-  ggplot() +
-  geom_point(mapping=aes(x=CPI, y=HDI, color=Region)) +
-  geom_line(mapping=aes(x=CPI, y=HDI, color=Region))
+  ggplot(mapping=aes(x=CPI, y=HDI, color=Region)) +
+  geom_point() +
+  geom_smooth(se=FALSE, method="lm")
 ```
+
+    `geom_smooth()` using formula = 'y ~ x'
 
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-9-1.png)
 
@@ -103,11 +105,13 @@ economist_data |>
 
 ``` r
 economist_data |>
-  ggplot() +
-  geom_point(mapping=aes(x=CPI, y=HDI, color=Region)) +
-  geom_line(mapping=aes(x=CPI, y=HDI, color=Region)) +
+  ggplot(mapping=aes(x=CPI, y=HDI, color=Region)) +
+  geom_point() +
+  geom_smooth(se=FALSE, method="lm") +
   facet_wrap(~Region)
 ```
+
+    `geom_smooth()` using formula = 'y ~ x'
 
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-10-1.png)
 
@@ -220,19 +224,19 @@ through RMarkdown **using the kable() function**, as shown above.
 
 ``` r
 Theoph |>
-  select(contains("t")) |>
+  select(contains("t", ignore.case=FALSE)) |>
   head () |>
   kable()
 ```
 
-| Subject |   Wt | Time |
-|:--------|-----:|-----:|
-| 1       | 79.6 | 0.00 |
-| 1       | 79.6 | 0.25 |
-| 1       | 79.6 | 0.57 |
-| 1       | 79.6 | 1.12 |
-| 1       | 79.6 | 2.02 |
-| 1       | 79.6 | 3.82 |
+| Subject |   Wt |
+|:--------|-----:|
+| 1       | 79.6 |
+| 1       | 79.6 |
+| 1       | 79.6 |
+| 1       | 79.6 |
+| 1       | 79.6 |
+| 1       | 79.6 |
 
 #### **2.2 Rename the `Wt` column to `Weight` and `conc` column to `Concentration` in the `Theoph` dataset.**
 

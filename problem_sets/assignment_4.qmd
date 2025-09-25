@@ -78,18 +78,18 @@ economist_data |>
 
 ```{r}
 economist_data |>
-  ggplot() +
-  geom_point(mapping=aes(x=CPI, y=HDI, color=Region)) +
-  geom_line(mapping=aes(x=CPI, y=HDI, color=Region))
+  ggplot(mapping=aes(x=CPI, y=HDI, color=Region)) +
+  geom_point() +
+  geom_smooth(se=FALSE, method="lm")
 ```
 
 #### **1.8 Building on top of the previous plot, show each `Region` in a different facet.**
 
 ```{r}
 economist_data |>
-  ggplot() +
-  geom_point(mapping=aes(x=CPI, y=HDI, color=Region)) +
-  geom_line(mapping=aes(x=CPI, y=HDI, color=Region)) +
+  ggplot(mapping=aes(x=CPI, y=HDI, color=Region)) +
+  geom_point() +
+  geom_smooth(se=FALSE, method="lm") +
   facet_wrap(~Region)
 ```
 
@@ -159,7 +159,7 @@ For the following exercise, **transform the data as instructed**. Try to use `ti
 
 ```{r}
 Theoph |>
-  select(contains("t")) |>
+  select(contains("t", ignore.case=FALSE)) |>
   head () |>
   kable()
 ```
