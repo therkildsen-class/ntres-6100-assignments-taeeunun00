@@ -1,5 +1,5 @@
 ---
-title: "assignment_4:Data_transformation_and_visualization"
+title: "Assignment_4: Data_transformation_and_visualization"
 format: gfm
 ---
 
@@ -132,7 +132,7 @@ economist_data |>
   summarize(number_of_countries=n()) |>
   ggplot() +
   geom_col(mapping=aes(x=Region, y=number_of_countries), fill="grey40") +
-  labs (x="Region", y="Count")
+  labs (x="Region", y="count")
 ```
 
 #### **1.13 You have now created a variety of different plots of the same dataset. Which of your plots do you think are the most informative? Describe briefly the major trends that you see in the data.**

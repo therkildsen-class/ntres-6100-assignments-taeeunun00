@@ -1,4 +1,4 @@
-# assignment_4
+# Assignment_4: Data_transformation_and_visualization
 
 
 ``` r
@@ -157,7 +157,7 @@ economist_data |>
   summarize(number_of_countries=n()) |>
   ggplot() +
   geom_col(mapping=aes(x=Region, y=number_of_countries), fill="grey40") +
-  labs (x="Region", y="Count")
+  labs (x="Region", y="count")
 ```
 
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-14-1.png)
