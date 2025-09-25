@@ -77,6 +77,9 @@ economist_data |>
 #### **1.7 Fit a separate straight line for each region instead, and turn off the confidence interval.**
 
 ```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
 economist_data |>
   ggplot(mapping=aes(x=CPI, y=HDI, color=Region)) +
   geom_point() +
@@ -86,6 +89,9 @@ economist_data |>
 #### **1.8 Building on top of the previous plot, show each `Region` in a different facet.**
 
 ```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
 economist_data |>
   ggplot(mapping=aes(x=CPI, y=HDI, color=Region)) +
   geom_point() +

@@ -97,8 +97,6 @@ economist_data |>
   geom_smooth(se=FALSE, method="lm")
 ```
 
-    `geom_smooth()` using formula = 'y ~ x'
-
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-9-1.png)
 
 #### **1.8 Building on top of the previous plot, show each `Region` in a different facet.**
@@ -110,8 +108,6 @@ economist_data |>
   geom_smooth(se=FALSE, method="lm") +
   facet_wrap(~Region)
 ```
-
-    `geom_smooth()` using formula = 'y ~ x'
 
 ![](assignment_4_files/figure-commonmark/unnamed-chunk-10-1.png)
 
