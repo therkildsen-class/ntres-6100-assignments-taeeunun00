@@ -15,7 +15,7 @@ Please use the following table to grade the student's assignment:
 |      1      |        X        |                     |               |
 |      2      |        X        |                     |               |
 |      3      |        X        |                     |               |
-|      4      |        X         |                     |               |
+|      4      |        X        |                     |               |
 |      5      |                 |                     |               |
 |      6      |                 |                     |               |
 |      7      |                 |                     |               |
@@ -35,3 +35,9 @@ Assignment 3:
 -   My partner's website: <https://sapkotal.github.io/assignment-3-ls2274/>
 
 Assignment 4: Uploaded to the ‘problem_sets’ folder
+
+Assignment 5:
+
+Assignment 6:
+
+Assignment 7:
