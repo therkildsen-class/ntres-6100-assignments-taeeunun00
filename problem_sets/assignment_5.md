@@ -120,7 +120,28 @@ gapminder %>%
 
 #### **2.1 Use a scatterplot to explore the relationship between per capita GDP (`gdpPercap`) and life expectancy (`lifeExp`) in the year 2007.**
 
+``` r
+gapminder |>
+  filter (year=="2007") |>
+  ggplot () +
+  geom_point (mapping=aes(x=gdpPercap, y=lifeExp))
+```
+
+![](assignment_5_files/figure-commonmark/unnamed-chunk-7-1.png)
+
 #### **2.2 Add a smoothing line to the previous plot.**
+
+``` r
+gapminder |>
+  filter (year=="2007") |>
+  ggplot (mapping=aes(x=gdpPercap, y=lifeExp)) +
+  geom_point () +
+  geom_smooth ()
+```
+
+    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+![](assignment_5_files/figure-commonmark/unnamed-chunk-8-1.png)
 
 #### **2.3 Exclude Oceania from the previous plot, show each continent in a different color, and fit a separate smoothing line to each continent to identify differences in this relationship between continents. Turn off the confidence intervals.**
 
@@ -128,7 +149,32 @@ Note: only two Oceanian countries are included in this dataset, and
 `geom_smooth()` does not work with two data points, which is why they
 are excluded.
 
+``` r
+gapminder |>
+  filter (year=="2007", continent!="Oceania") |>
+  ggplot (mapping=aes(x=gdpPercap, y=lifeExp, color=continent)) +
+  geom_point () +
+  geom_smooth (se=FALSE)
+```
+
+    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+![](assignment_5_files/figure-commonmark/unnamed-chunk-9-1.png)
+
 #### **2.4 Use faceting to solve the same problem. Include the confidence intervals in this plot.**
+
+``` r
+gapminder |>
+  filter (year=="2007", continent!="Oceania") |>
+  ggplot (mapping=aes(x=gdpPercap, y=lifeExp, color=continent)) +
+  geom_point () +
+  geom_smooth () +
+  facet_wrap (~continent)
+```
+
+    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+![](assignment_5_files/figure-commonmark/unnamed-chunk-10-1.png)
 
 #### **2.5 Explore the trend in life expectancy through time in each continent. Color by continent.**
 
