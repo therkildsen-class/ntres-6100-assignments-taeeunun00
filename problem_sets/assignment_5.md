@@ -139,8 +139,6 @@ gapminder |>
   geom_smooth ()
 ```
 
-    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
-
 ![](assignment_5_files/figure-commonmark/unnamed-chunk-8-1.png)
 
 #### **2.3 Exclude Oceania from the previous plot, show each continent in a different color, and fit a separate smoothing line to each continent to identify differences in this relationship between continents. Turn off the confidence intervals.**
@@ -157,8 +155,6 @@ gapminder |>
   geom_smooth (se=FALSE)
 ```
 
-    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
-
 ![](assignment_5_files/figure-commonmark/unnamed-chunk-9-1.png)
 
 #### **2.4 Use faceting to solve the same problem. Include the confidence intervals in this plot.**
@@ -171,8 +167,6 @@ gapminder |>
   geom_smooth () +
   facet_wrap (~continent)
 ```
-
-    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
 ![](assignment_5_files/figure-commonmark/unnamed-chunk-10-1.png)
 
@@ -188,6 +182,22 @@ gapminder |>
 ![](assignment_5_files/figure-commonmark/unnamed-chunk-11-1.png)
 
 #### **2.6 From the previous plot, we see some abnormal trends in Asia and Africa, where the the life expectancy in some countries sharply dropped at certain time periods. Here, we look into what happened in Asia in more detail. First, create a new dataset by filtering only the Asian countries. Show the first 6 lines of this filtered dataset.**
+
+``` r
+gapminder |>
+  filter(continent == "Asia") |>
+  head () |>
+  kable ()
+```
+
+| country     | continent | year | lifeExp |      pop | gdpPercap |
+|:------------|:----------|-----:|--------:|---------:|----------:|
+| Afghanistan | Asia      | 1952 |  28.801 |  8425333 |  779.4453 |
+| Afghanistan | Asia      | 1957 |  30.332 |  9240934 |  820.8530 |
+| Afghanistan | Asia      | 1962 |  31.997 | 10267083 |  853.1007 |
+| Afghanistan | Asia      | 1967 |  34.020 | 11537966 |  836.1971 |
+| Afghanistan | Asia      | 1972 |  36.088 | 13079460 |  739.9811 |
+| Afghanistan | Asia      | 1977 |  38.438 | 14880372 |  786.1134 |
 
 #### **2.7 Using the filtered dataset, identify the countries that had abnormal trends in life expectancy by plotting, and discuss historical events possibly explaining these trends. (Hint: facet by country)**
 

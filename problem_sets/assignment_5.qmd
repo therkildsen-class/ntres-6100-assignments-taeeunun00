@@ -94,6 +94,9 @@ gapminder |>
 #### **2.2 Add a smoothing line to the previous plot.**
 
 ```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
 gapminder |>
   filter (year=="2007") |>
   ggplot (mapping=aes(x=gdpPercap, y=lifeExp)) +
@@ -106,6 +109,9 @@ gapminder |>
 Note: only two Oceanian countries are included in this dataset, and `geom_smooth()` does not work with two data points, which is why they are excluded.
 
 ```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
 gapminder |>
   filter (year=="2007", continent!="Oceania") |>
   ggplot (mapping=aes(x=gdpPercap, y=lifeExp, color=continent)) +
@@ -116,6 +122,9 @@ gapminder |>
 #### **2.4 Use faceting to solve the same problem. Include the confidence intervals in this plot.**
 
 ```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
 gapminder |>
   filter (year=="2007", continent!="Oceania") |>
   ggplot (mapping=aes(x=gdpPercap, y=lifeExp, color=continent)) +
@@ -134,6 +143,13 @@ gapminder |>
 ```
 
 #### **2.6 From the previous plot, we see some abnormal trends in Asia and Africa, where the the life expectancy in some countries sharply dropped at certain time periods. Here, we look into what happened in Asia in more detail. First, create a new dataset by filtering only the Asian countries. Show the first 6 lines of this filtered dataset.**
+
+```{r}
+gapminder |>
+  filter(continent == "Asia") |>
+  head () |>
+  kable ()
+```
 
 #### **2.7 Using the filtered dataset, identify the countries that had abnormal trends in life expectancy by plotting, and discuss historical events possibly explaining these trends. (Hint: facet by country)**
 
