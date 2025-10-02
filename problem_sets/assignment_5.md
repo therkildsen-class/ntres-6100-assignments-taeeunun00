@@ -48,7 +48,7 @@ housing |>
   mutate (region=ifelse(State == "DC", "South", region)) |>
   select(region, State, Land.Value, Date) |>
   filter (State=="DC") |>
-  head () |>
+  head () |> 
   kable ()
 ```
 
@@ -61,7 +61,8 @@ housing |>
 | South  | DC    |     361999 | 2004.00 |
 | South  | DC    |     382792 | 2004.25 |
 
-Answer: Write your response here.
+Answer: There are 153 records from DC. The first 6 lines are shown
+above.
 
 #### **1.2 Generate a tibble/dataframe that summarizes the mean land value of each region at each time point and show its first 6 lines.**
 
@@ -201,4 +202,18 @@ gapminder |>
 
 #### **2.7 Using the filtered dataset, identify the countries that had abnormal trends in life expectancy by plotting, and discuss historical events possibly explaining these trends. (Hint: facet by country)**
 
-Answer: Write your response here.
+Answer: The countries that show the most abnormal drops in life
+expectancy are Cambodia, China, and Iraq.
+
+- **Cambodia:** Between the 1970s and 1980s, there is a sudden decline
+  in life expectancy. This is expected to be due to the Cambodian Civil
+  War and the rise of the Khmer Rouge, which led to the fall of the
+  Khmer Republic and eventually to massive deaths and social disruption.
+
+- **China:** Around 1960s, life expectancy suddenly drops. This is
+  expected to be due to the Mao Zedong’s Great Leap Forward and the
+  resulting famine, which lead to massive death.
+
+- **Iraq:** From the late 1980s, there is a noticeable decline. This can
+  be explained by the Iran-Iraq War, followed by the Gulf War and UN
+  sanctions, which had sever impacts on public heath.
