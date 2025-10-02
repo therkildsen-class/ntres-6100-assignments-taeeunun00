@@ -1,0 +1,105 @@
+---
+title: "lab6"
+format: gfm
+---
+
+## **Exercise 1: Whale observation (40 min)**
+
+Tidy up the messy `whales` dataset.
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+library(tidyverse)
+library(knitr)
+
+whales <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/main/datasets/whales.csv")
+
+whales |>
+  head () |>
+  kable ()
+```
+
+#### **Question 1. Create a new data frame that has one row per observer, per species and one single variable of all the information collected. Name this data frame `whales_long`.**
+
+```{r}
+whales_long <- whales |>
+  pivot_longer (-1, names_to="species", values_to="all_the_info")
+
+whales_long |>
+  head () |>
+  kable ()
+```
+
+#### **Question 2. Starting from `whales_long`, create another data frame that includes only events for which there is information. Name this data frame `whales_clean`.**
+
+*Hint: `is.na()` might be helpful.*
+
+```{r}
+whales_clean <- whales_long |>
+  filter (!is.na(all_the_info))
+
+whales_clean |>
+  head () |>
+  kable ()
+```
+
+#### **Question 3. Starting from `whales_clean`, create another data frame with one variable per type of information, one piece of information per cell. Some cells might be empty. Name this data frame `whales_split`.**
+
+Your new data frame should have six variables: observer, species, date, outcome, size, ocean.
+
+```{r}
+whales_split <- whales_clean |>
+  separate (all_the_info, c("date", "outcome", "size", "ocean"), ",")
+  
+whales_split |>
+  head () |>
+  kable ()
+```
+
+#### **Question 4. Starting from `whales_split`, create another data frame in which all columns are parsed as instructed below. Name this data frame `whales_parsed`.**
+
+The columns should parsed to the following types\
+\* `observer`: double\
+\* `species`: character\
+\* `date`: date\
+\* `outcome`: character\
+\* `size`: integer\
+\* `ocean`: character
+
+```{r}
+whales_parsed <- whales_split |>
+  type_convert (col_types=cols(date=col_date(format="%m/%d/%y"), size=col_integer()))
+
+whales_parsed |>
+  head () |>
+  kable ()
+```
+
+#### **Question 5. Using `whales_parsed`, print a summary table with: 1) number ship strikes by species, 2) average whale size by species, omitting NA values in the calculation.**
+
+```{r}
+whales_parsed |>
+  group_by (species) |>
+  summarise(number_ship_strikes_by_species = n(), average_whale_size_by_species = mean(size, na.rm=TRUE)) |>
+  kable ()
+```
+
+#### 
+
+## **Exercise 2: Baby names (50 min)**
+
+Use data tidying, transformation, and visualization to answer the following questions about baby names:
+
+```{r}
+library(babynames)
+
+babynames |>
+  head () |>
+  kable ()
+```
+
+#### **Question 1: What are the 6 most popular boy names and girl names of all time? How has the popularity of each of these names changed over time?**
+
+*Hint: You can start by finding the 6 most popular names for each sex separately.*
