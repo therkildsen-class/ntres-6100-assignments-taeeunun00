@@ -103,3 +103,45 @@ babynames |>
 #### **Question 1: What are the 6 most popular boy names and girl names of all time? How has the popularity of each of these names changed over time?**
 
 *Hint: You can start by finding the 6 most popular names for each sex separately.*
+
+```{r}
+top_6_boys_names <- babynames |>
+  filter (sex == "M") |>
+  group_by (name) |>
+  summarize (total_count = sum(n)) |>
+  slice_max (order_by = total_count, n=6)
+
+top_6_girls_names <- babynames |>
+  filter (sex == "F") |>
+  group_by (name) |>
+  summarize (total_count = sum(n)) |>
+  slice_max (order_by = total_count, n=6)
+
+babynames |>
+  filter ((name %in% top_6_boys_names$name & sex == "M") | (name %in% top_6_girls_names$name & sex == "F")) |>
+  ggplot () + 
+  geom_line (mapping=aes(x=year, y=prop, group=name, color=sex)) + 
+  facet_wrap (~name)
+```
+
+```{r}
+top_6_boys_names <- babynames |>
+  filter (sex == "M") |>
+  group_by (name) |>
+  summarize (total_count = sum(n)) |>
+  arrange (-total_count) |>
+  head ()
+
+top_6_girls_names <- babynames |>
+  filter (sex == "F") |>
+  group_by (name) |>
+  summarize (total_count = sum(n)) |>
+  arrange (-total_count) |>
+  head ()
+
+babynames |>
+  filter ((name %in% top_6_boys_names$name & sex == "M") | (name %in% top_6_girls_names$name & sex == "F")) |>
+  ggplot () + 
+  geom_line (mapping=aes(x=year, y=prop, group=name, color=sex)) + 
+  facet_wrap (~name)
+```
