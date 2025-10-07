@@ -50,3 +50,61 @@ dataset3 <- read_delim ("https://raw.githubusercontent.com/nt246/NTRES-6100-data
 
 dataset3
 ```
+
+## **Exercise 2. Weather station**
+
+This dataset contains the weather and air quality data collected by a weather station in Taiwan. It was obtained from the Environmental Protection Administration, Executive Yuan, R.O.C. (Taiwan).
+
+#### **2.1 Variable descriptions**
+
+-   The text file `https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station_notes.txt` contains descriptions of different variables collected by the station.
+
+-   Import it into R and print it in a table as shown below with `kable()`.
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+dataset4 <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station_notes.txt")
+
+dataset4_clean_version <- dataset4 |>
+  separate('Item-Unit-Description', into = c("Item", "Unit", "Description"), sep = "-")
+
+dataset4_clean_version |>
+  kable ()
+```
+
+#### **2.2 Data tidying**
+
+-   Import `https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station.csv` into R. As you can see, this dataset is a classic example of untidy data: values of a variable (i.e. hour of the day) are stored as column names; variable names are stored in the `item` column.
+
+-   Clean this dataset up and restructure it into a tidy format.
+
+-   Parse the `date` variable into date format and parse `hour` into time.
+
+-   Turn all invalid values into `NA` and turn `NR` in rainfall into `0`.
+
+-   Parse all values into numbers.
+
+-   Show the first 6 rows and 10 columns of this cleaned dataset, as shown below, *without* using `kable()`.
+
+*Hints: you don’t have to perform these tasks in the given order; also, warning messages are not necessarily signs of trouble.*
+
+Before cleaning:
+
+```{r}
+dataset5_before_cleaning <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station.csv", col_names = TRUE)
+
+dataset5_before_cleaning |>
+  select (1:10) |>
+  head()
+```
+
+After cleaning:
+
+```{r}
+
+dataset5_clean <- dataset5_before_cleaning |>
+  pivot_longer (names_to = "hour", values_to = "value") |>
+  
+```

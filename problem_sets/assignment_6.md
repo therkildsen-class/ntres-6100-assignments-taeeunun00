@@ -77,18 +77,7 @@ dataset2
 ``` r
 dataset3 <- read_delim ("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/dataset3.txt", delim=";", skip=3, col_names = c("Name", "Weight", "Price"), na = c("Not Available", "?")) |>
   mutate (Name = str_remove_all(Name, "/"))
-```
 
-    Rows: 3 Columns: 3
-    ── Column specification ────────────────────────────────────────────────────────
-    Delimiter: ";"
-    chr (1): Name
-    dbl (2): Weight, Price
-
-    ℹ Use `spec()` to retrieve the full column specification for this data.
-    ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 dataset3
 ```
 
@@ -98,3 +87,115 @@ dataset3
     1 apple       1   2.9
     2 orange      2  NA  
     3 durian     NA  19.9
+
+## **Exercise 2. Weather station**
+
+This dataset contains the weather and air quality data collected by a
+weather station in Taiwan. It was obtained from the Environmental
+Protection Administration, Executive Yuan, R.O.C. (Taiwan).
+
+#### **2.1 Variable descriptions**
+
+- The text file
+  `https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station_notes.txt`
+  contains descriptions of different variables collected by the station.
+
+- Import it into R and print it in a table as shown below with
+  `kable()`.
+
+``` r
+dataset4 <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station_notes.txt")
+```
+
+    Rows: 15 Columns: 1
+    ── Column specification ────────────────────────────────────────────────────────
+    Delimiter: ","
+    chr (1): Item-Unit-Description
+
+    ℹ Use `spec()` to retrieve the full column specification for this data.
+    ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+dataset4_clean_version <- dataset4 |>
+  separate('Item-Unit-Description', into = c("Item", "Unit", "Description"), sep = "-")
+
+dataset4_clean_version |>
+  kable ()
+```
+
+| Item | Unit | Description |
+|:---|:---|:---|
+| AMB_TEMP | Celsius | Ambient air temperature |
+| CO | ppm | Carbon monoxide |
+| NO | ppb | Nitric oxide |
+| NO2 | ppb | Nitrogen dioxide |
+| NOx | ppb | Nitrogen oxides |
+| O3 | ppb | Ozone |
+| PM10 | μg/m3 | Particulate matter with a diameter between 2.5 and 10 μm |
+| PM2.5 | μg/m3 | Particulate matter with a diameter of 2.5 μm or less |
+| RAINFALL | mm | Rainfall |
+| RH | % | Relative humidity |
+| SO2 | ppb | Sulfur dioxide |
+| WD_HR | degress | Wind direction (The average of hour) |
+| WIND_DIREC | degress | Wind direction (The average of last ten minutes per hour) |
+| WIND_SPEED | m/sec | Wind speed (The average of last ten minutes per hour) |
+| WS_HR | m/sec | Wind speed (The average of hour) |
+
+#### **2.2 Data tidying**
+
+- Import
+  `https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station.csv`
+  into R. As you can see, this dataset is a classic example of untidy
+  data: values of a variable (i.e. hour of the day) are stored as column
+  names; variable names are stored in the `item` column.
+
+- Clean this dataset up and restructure it into a tidy format.
+
+- Parse the `date` variable into date format and parse `hour` into time.
+
+- Turn all invalid values into `NA` and turn `NR` in rainfall into `0`.
+
+- Parse all values into numbers.
+
+- Show the first 6 rows and 10 columns of this cleaned dataset, as shown
+  below, *without* using `kable()`.
+
+*Hints: you don’t have to perform these tasks in the given order; also,
+warning messages are not necessarily signs of trouble.*
+
+Before cleaning:
+
+``` r
+dataset5_before_cleaning <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station.csv", col_names = TRUE)
+```
+
+    Warning: One or more parsing issues, call `problems()` on your data frame for details,
+    e.g.:
+      dat <- vroom(...)
+      problems(dat)
+
+    Rows: 5460 Columns: 27
+    ── Column specification ────────────────────────────────────────────────────────
+    Delimiter: ","
+    chr  (15): station, item, 04, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20
+    dbl  (11): 00, 01, 02, 03, 05, 06, 07, 19, 21, 22, 23
+    date  (1): date
+
+    ℹ Use `spec()` to retrieve the full column specification for this data.
+    ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+dataset5_before_cleaning |>
+  select (1:10) |>
+  head()
+```
+
+    # A tibble: 6 × 10
+      date       station item      `00`  `01`  `02`  `03` `04`   `05`  `06`
+      <date>     <chr>   <chr>    <dbl> <dbl> <dbl> <dbl> <chr> <dbl> <dbl>
+    1 2015-01-01 Cailiao AMB_TEMP 16     16   15    15    15    14    14   
+    2 2015-01-01 Cailiao CO        0.74   0.7  0.66  0.61 0.51   0.51  0.51
+    3 2015-01-01 Cailiao NO        1      0.8  1.1   1.7  2      1.7   1.9 
+    4 2015-01-01 Cailiao NO2      15     13   13    12    11    13    13   
+    5 2015-01-01 Cailiao NOx      16     14   14    13    13    15    15   
+    6 2015-01-01 Cailiao O3       35     36   35    34    34    32    30   
