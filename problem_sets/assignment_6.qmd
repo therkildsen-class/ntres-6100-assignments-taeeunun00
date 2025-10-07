@@ -108,3 +108,15 @@ dataset5_clean <- dataset5_before_cleaning |>
   pivot_longer (names_to = "hour", values_to = "value") |>
   
 ```
+
+#### **2.3 Using this cleaned dataset, plot the daily variation in ambient temperature on September 25, 2015, as shown below.**
+
+#### **2.4 Plot the daily average ambient temperature throughout the year with a continuous line, as shown below.**
+
+#### **2.5 Plot the total rainfall per month in a bar chart, as shown below.**
+
+*Hint: separating date into three columns might be helpful.*
+
+#### **2.6 Plot the per hour variation in PM2.5 in the first week of September with a continuous line, as shown below.**
+
+*Hint: uniting the date and hour and parsing the new variable might be helpful.*
