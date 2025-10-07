@@ -3,4 +3,50 @@ title: "assignment_6"
 format: gfm
 ---
 
-this is 
+```{r}
+library(tidyverse)
+library(knitr)
+```
+
+## **Exercise 1. Tibble and Data Import**
+
+Import the data frames listed below into R and [parse](https://r4ds.had.co.nz/data-import.html#parsing-a-vector) the columns appropriately when needed. Watch out for the formatting oddities of each dataset. Print the results directly, **without** using `kable()`.
+
+**You only need to finish any three out of the five questions in this exercise in order to get credit.**
+
+#### **1.1 Create the following tibble manually, first using `tribble()` and then using `tibble()`. Print both results. \[We didn’t have time to cover this in class, but look up how these functions work [here](https://r4ds.had.co.nz/tibbles.html#creating-tibbles)\]**
+
+`tribble()`:
+
+```{r}
+tibble(a=1:2, b=c(2.1,3.2), c=c("apple", "orange"))
+```
+
+`tibble()`:
+
+```{r}
+tribble(~a, ~b, ~c, 1, 2.1, "apple", 2, 3.2, "orange")
+```
+
+#### **1.2 Import `https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/dataset2.txt` into R. Change the column names into “Name”, “Weight”, “Price”.**
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+dataset2 <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/dataset2.txt", col_names = c("Name", "Weight", "Price"))
+
+dataset2
+```
+
+#### **1.3 Import `https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/dataset3.txt` into R. Watch out for the first few lines, missing values, separators, quotation marks, and deliminaters.**
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+dataset3 <- read_delim ("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/dataset3.txt", delim=";", skip=3, col_names = c("Name", "Weight", "Price"), na = c("Not Available", "?")) |>
+  mutate (Name = str_remove_all(Name, "/"))
+
+dataset3
+```
