@@ -54,7 +54,7 @@ dataset3 <- read_delim ("https://raw.githubusercontent.com/nt246/NTRES-6100-data
 dataset3
 ```
 
-## **Exercise 2. Weather station**
+## **Exercise 2. Weather Station**
 
 This dataset contains the weather and air quality data collected by a weather station in Taiwan. It was obtained from the Environmental Protection Administration, Executive Yuan, R.O.C. (Taiwan).
 

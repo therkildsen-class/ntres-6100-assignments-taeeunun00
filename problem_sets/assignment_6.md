@@ -74,7 +74,7 @@ dataset3
     2 orange      2  NA  
     3 durian     NA  19.9
 
-## **Exercise 2. Weather station**
+## **Exercise 2. Weather Station**
 
 This dataset contains the weather and air quality data collected by a
 weather station in Taiwan. It was obtained from the Environmental
