@@ -105,17 +105,7 @@ Protection Administration, Executive Yuan, R.O.C. (Taiwan).
 
 ``` r
 dataset4 <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station_notes.txt")
-```
 
-    Rows: 15 Columns: 1
-    ── Column specification ────────────────────────────────────────────────────────
-    Delimiter: ","
-    chr (1): Item-Unit-Description
-
-    ℹ Use `spec()` to retrieve the full column specification for this data.
-    ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 dataset4_clean_version <- dataset4 |>
   separate('Item-Unit-Description', into = c("Item", "Unit", "Description"), sep = "-")
 
@@ -166,36 +156,56 @@ warning messages are not necessarily signs of trouble.*
 Before cleaning:
 
 ``` r
-dataset5_before_cleaning <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station.csv", col_names = TRUE)
-```
+dataset5_before_cleaning <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station.csv", col_names = TRUE, col_types = cols(.default = "c"))
 
-    Warning: One or more parsing issues, call `problems()` on your data frame for details,
-    e.g.:
-      dat <- vroom(...)
-      problems(dat)
-
-    Rows: 5460 Columns: 27
-    ── Column specification ────────────────────────────────────────────────────────
-    Delimiter: ","
-    chr  (15): station, item, 04, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20
-    dbl  (11): 00, 01, 02, 03, 05, 06, 07, 19, 21, 22, 23
-    date  (1): date
-
-    ℹ Use `spec()` to retrieve the full column specification for this data.
-    ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 dataset5_before_cleaning |>
   select (1:10) |>
   head()
 ```
 
     # A tibble: 6 × 10
-      date       station item      `00`  `01`  `02`  `03` `04`   `05`  `06`
-      <date>     <chr>   <chr>    <dbl> <dbl> <dbl> <dbl> <chr> <dbl> <dbl>
-    1 2015-01-01 Cailiao AMB_TEMP 16     16   15    15    15    14    14   
-    2 2015-01-01 Cailiao CO        0.74   0.7  0.66  0.61 0.51   0.51  0.51
-    3 2015-01-01 Cailiao NO        1      0.8  1.1   1.7  2      1.7   1.9 
-    4 2015-01-01 Cailiao NO2      15     13   13    12    11    13    13   
-    5 2015-01-01 Cailiao NOx      16     14   14    13    13    15    15   
-    6 2015-01-01 Cailiao O3       35     36   35    34    34    32    30   
+      date       station item     `00`  `01`  `02`  `03`  `04`  `05`  `06` 
+      <chr>      <chr>   <chr>    <chr> <chr> <chr> <chr> <chr> <chr> <chr>
+    1 2015/01/01 Cailiao AMB_TEMP 16    16    15    15    15    14    14   
+    2 2015/01/01 Cailiao CO       0.74  0.7   0.66  0.61  0.51  0.51  0.51 
+    3 2015/01/01 Cailiao NO       1     0.8   1.1   1.7   2     1.7   1.9  
+    4 2015/01/01 Cailiao NO2      15    13    13    12    11    13    13   
+    5 2015/01/01 Cailiao NOx      16    14    14    13    13    15    15   
+    6 2015/01/01 Cailiao O3       35    36    35    34    34    32    30   
+
+After cleaning:
+
+``` r
+dataset5_after_cleaning <- dataset5_before_cleaning |>
+  pivot_longer (cols='00':'23', names_to ="hour", values_to = "value") |>
+  mutate(hour =paste0(hour, ":00")) |>
+  pivot_wider (names_from = item, values_from = value) |>
+  mutate (date = as.Date (date), across (AMB_TEMP:PM10, as.numeric))
+
+dataset5_after_cleaning |>
+  select (1:10) |>
+  head ()
+```
+
+    # A tibble: 6 × 10
+      date       station hour  AMB_TEMP    CO    NO   NO2   NOx    O3  PM10
+      <date>     <chr>   <chr>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    1 2015-01-01 Cailiao 00:00       16  0.74   1      15    16    35   171
+    2 2015-01-01 Cailiao 01:00       16  0.7    0.8    13    14    36   174
+    3 2015-01-01 Cailiao 02:00       15  0.66   1.1    13    14    35   160
+    4 2015-01-01 Cailiao 03:00       15  0.61   1.7    12    13    34   142
+    5 2015-01-01 Cailiao 04:00       15  0.51   2      11    13    34   123
+    6 2015-01-01 Cailiao 05:00       14  0.51   1.7    13    15    32   110
+
+#### **2.3 Using this cleaned dataset, plot the daily variation in ambient temperature on September 25, 2015, as shown below.**
+
+#### **2.4 Plot the daily average ambient temperature throughout the year with a continuous line, as shown below.**
+
+#### **2.5 Plot the total rainfall per month in a bar chart, as shown below.**
+
+*Hint: separating date into three columns might be helpful.*
+
+#### **2.6 Plot the per hour variation in PM2.5 in the first week of September with a continuous line, as shown below.**
+
+*Hint: uniting the date and hour and parsing the new variable might be
+helpful.*

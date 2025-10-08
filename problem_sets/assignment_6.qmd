@@ -93,7 +93,10 @@ dataset4_clean_version |>
 Before cleaning:
 
 ```{r}
-dataset5_before_cleaning <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station.csv", col_names = TRUE)
+#| message: false
+#| warning: false
+#| paged-print: false
+dataset5_before_cleaning <- read_csv("https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/2015y_Weather_Station.csv", col_names = TRUE, col_types = cols(.default = "c"))
 
 dataset5_before_cleaning |>
   select (1:10) |>
@@ -103,10 +106,19 @@ dataset5_before_cleaning |>
 After cleaning:
 
 ```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
 
-dataset5_clean <- dataset5_before_cleaning |>
-  pivot_longer (names_to = "hour", values_to = "value") |>
-  
+dataset5_after_cleaning <- dataset5_before_cleaning |>
+  pivot_longer (cols='00':'23', names_to ="hour", values_to = "value") |>
+  mutate(hour =paste0(hour, ":00")) |>
+  pivot_wider (names_from = item, values_from = value) |>
+  mutate (date = as.Date (date), across (AMB_TEMP:PM10, as.numeric))
+
+dataset5_after_cleaning |>
+  select (1:10) |>
+  head ()
 ```
 
 #### **2.3 Using this cleaned dataset, plot the daily variation in ambient temperature on September 25, 2015, as shown below.**
