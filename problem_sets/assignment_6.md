@@ -3,20 +3,6 @@
 
 ``` r
 library(tidyverse)
-```
-
-    ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ✔ ggplot2   3.5.2     ✔ tibble    3.3.0
-    ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-    ✔ purrr     1.1.0     
-    ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ✖ dplyr::filter() masks stats::filter()
-    ✖ dplyr::lag()    masks stats::lag()
-    ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-
-``` r
 library(knitr)
 ```
 
@@ -36,24 +22,24 @@ exercise in order to get credit.**
 `tribble()`:
 
 ``` r
-tibble(a=1:2, b=c(2.1,3.2), c=c("apple", "orange"))
-```
-
-    # A tibble: 2 × 3
-          a     b c     
-      <int> <dbl> <chr> 
-    1     1   2.1 apple 
-    2     2   3.2 orange
-
-`tibble()`:
-
-``` r
 tribble(~a, ~b, ~c, 1, 2.1, "apple", 2, 3.2, "orange")
 ```
 
     # A tibble: 2 × 3
           a     b c     
       <dbl> <dbl> <chr> 
+    1     1   2.1 apple 
+    2     2   3.2 orange
+
+`tibble()`:
+
+``` r
+tibble(a=1:2, b=c(2.1,3.2), c=c("apple", "orange"))
+```
+
+    # A tibble: 2 × 3
+          a     b c     
+      <int> <dbl> <chr> 
     1     1   2.1 apple 
     2     2   3.2 orange
 
@@ -131,6 +117,12 @@ dataset4_clean_version |>
 | WIND_SPEED | m/sec | Wind speed (The average of last ten minutes per hour) |
 | WS_HR | m/sec | Wind speed (The average of hour) |
 
+`#` indicates invalid value by equipment inspection  
+`*` indicates invalid value by program inspection  
+`x` indicates invalid value by human inspection  
+`NR` indicates no rainfall  
+blank indicates no data
+
 #### **2.2 Data tidying**
 
 - Import
@@ -178,9 +170,8 @@ After cleaning:
 ``` r
 dataset5_after_cleaning <- dataset5_before_cleaning |>
   pivot_longer (cols='00':'23', names_to ="hour", values_to = "value") |>
-  mutate(hour =paste0(hour, ":00")) |>
   pivot_wider (names_from = item, values_from = value) |>
-  mutate (date = as.Date (date), across (AMB_TEMP:PM10, as.numeric))
+  mutate (date = as.Date (date), across (AMB_TEMP:PM10, as.numeric), hour= hms::as_hms(paste0(hour, ":00:00")))
 
 dataset5_after_cleaning |>
   select (1:10) |>
@@ -188,14 +179,14 @@ dataset5_after_cleaning |>
 ```
 
     # A tibble: 6 × 10
-      date       station hour  AMB_TEMP    CO    NO   NO2   NOx    O3  PM10
-      <date>     <chr>   <chr>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-    1 2015-01-01 Cailiao 00:00       16  0.74   1      15    16    35   171
-    2 2015-01-01 Cailiao 01:00       16  0.7    0.8    13    14    36   174
-    3 2015-01-01 Cailiao 02:00       15  0.66   1.1    13    14    35   160
-    4 2015-01-01 Cailiao 03:00       15  0.61   1.7    12    13    34   142
-    5 2015-01-01 Cailiao 04:00       15  0.51   2      11    13    34   123
-    6 2015-01-01 Cailiao 05:00       14  0.51   1.7    13    15    32   110
+      date       station hour   AMB_TEMP    CO    NO   NO2   NOx    O3  PM10
+      <date>     <chr>   <time>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    1 2015-01-01 Cailiao 00:00        16  0.74   1      15    16    35   171
+    2 2015-01-01 Cailiao 01:00        16  0.7    0.8    13    14    36   174
+    3 2015-01-01 Cailiao 02:00        15  0.66   1.1    13    14    35   160
+    4 2015-01-01 Cailiao 03:00        15  0.61   1.7    12    13    34   142
+    5 2015-01-01 Cailiao 04:00        15  0.51   2      11    13    34   123
+    6 2015-01-01 Cailiao 05:00        14  0.51   1.7    13    15    32   110
 
 #### **2.3 Using this cleaned dataset, plot the daily variation in ambient temperature on September 25, 2015, as shown below.**
 
@@ -203,8 +194,7 @@ dataset5_after_cleaning |>
 dataset5_after_cleaning |>
   filter (date == "2015-09-25") |>
   ggplot () +
-  geom_line (aes(x=hour, y=AMB_TEMP, group=1)) +
-  scale_x_discrete(breaks = c("00:00", "04:00", "08:00", "12:00", "16:00", "20:00", "24:00"))
+  geom_line (aes(x=hour, y=AMB_TEMP, group=1))
 ```
 
 ![](assignment_6_files/figure-commonmark/unnamed-chunk-9-1.png)
@@ -212,12 +202,13 @@ dataset5_after_cleaning |>
 #### **2.4 Plot the daily average ambient temperature throughout the year with a continuous line, as shown below.**
 
 ``` r
-dataset5_after_cleaning |>
-  filter (date >= "2015-01-01" & date <= "2016-01-01") |>
+average_ambient_temperature <- dataset5_after_cleaning |>
   group_by (date) |>
-  summarize (daily_average_ambient_temperature = sum(AMB_TEMP)) |>
+  summarize (daily_average_ambient_temperature = mean (AMB_TEMP, na.rm = TRUE))
+
+average_ambient_temperature |>
   ggplot () +
-  geom_line (aes(x=date, y=daily_average_ambient_temperature))
+  geom_line (mapping=aes(x=date, y=daily_average_ambient_temperature))
 ```
 
 ![](assignment_6_files/figure-commonmark/unnamed-chunk-10-1.png)
@@ -228,7 +219,7 @@ dataset5_after_cleaning |>
 
 ``` r
 dataset5_after_cleaning |>
-  mutate (month=as.numeric(format(date, "%m")), RAINFALL = as.numeric(RAINFALL)) |>
+  mutate (month= month(date), RAINFALL = as.numeric(RAINFALL)) |>
   group_by (month) |>
   summarize (MonthlyRainfall=sum(RAINFALL, na.rm=TRUE)) |>
   ggplot(aes(x=factor(month, levels =1:12), y = MonthlyRainfall)) +
@@ -242,13 +233,3 @@ dataset5_after_cleaning |>
 
 *Hint: uniting the date and hour and parsing the new variable might be
 helpful.*
-
-``` r
-dataset5_after_cleaning |>
-  mutate (PM2.5 = as.numeric(PM2.5), time=as.POSIXct(paste(date, hour), format= "%Y-%m-%d %H:%M")) |>
-  filter (format(date, "%m") == "09", as.numeric(format(date, "%d")) <= 7) |>
-  ggplot () +
-  geom_line (mapping=aes(x=time, y=PM2.5))
-```
-
-![](assignment_6_files/figure-commonmark/unnamed-chunk-12-1.png)
