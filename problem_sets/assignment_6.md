@@ -199,11 +199,49 @@ dataset5_after_cleaning |>
 
 #### **2.3 Using this cleaned dataset, plot the daily variation in ambient temperature on September 25, 2015, as shown below.**
 
+``` r
+dataset5_after_cleaning |>
+  filter (date == "2015-09-25") |>
+  ggplot () +
+  geom_line (aes(x=hour, y=AMB_TEMP, group=1)) +
+  scale_x_discrete(breaks = c("00:00", "04:00", "08:00", "12:00", "16:00", "20:00", "24:00"))
+```
+
+![](assignment_6_files/figure-commonmark/unnamed-chunk-9-1.png)
+
 #### **2.4 Plot the daily average ambient temperature throughout the year with a continuous line, as shown below.**
+
+``` r
+dataset5_after_cleaning |>
+  filter (date >= "2015-01-01" & date <= "2016-01-01") |>
+  group_by (date) |>
+  summarize (daily_average_ambient_temperature = sum(AMB_TEMP)) |>
+  ggplot () +
+  geom_line (aes(x=date, y=daily_average_ambient_temperature))
+```
+
+![](assignment_6_files/figure-commonmark/unnamed-chunk-10-1.png)
 
 #### **2.5 Plot the total rainfall per month in a bar chart, as shown below.**
 
 *Hint: separating date into three columns might be helpful.*
+
+``` r
+dataset5_after_cleaning |>
+  mutate (month=as.numeric(format(date, "%m")), RAINFALL = as.numeric(RAINFALL)) |>
+  group_by (month) |>
+  summarize (MonthlyRainfall=sum(RAINFALL, na.rm=TRUE)) |>
+  ggplot(aes(x=factor(month, levels =1:12), y = MonthlyRainfall)) +
+  geom_bar (stat="identity") +
+  labs(x="month", y="MonthlyRainfall")
+```
+
+    Warning: There was 1 warning in `mutate()`.
+    ℹ In argument: `RAINFALL = as.numeric(RAINFALL)`.
+    Caused by warning:
+    ! NAs introduced by coercion
+
+![](assignment_6_files/figure-commonmark/unnamed-chunk-11-1.png)
 
 #### **2.6 Plot the per hour variation in PM2.5 in the first week of September with a continuous line, as shown below.**
 
