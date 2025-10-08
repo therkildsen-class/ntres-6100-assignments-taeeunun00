@@ -178,9 +178,13 @@ dataset5_after_cleaning |>
 *Hint: uniting the date and hour and parsing the new variable might be helpful.*
 
 ```{r}
-
+#| message: false
+#| warning: false
+#| paged-print: false
 dataset5_after_cleaning |>
-
+  filter (month(date) == 9, day(date) <= 7) |>
+  mutate (time = as.POSIXct(date) + as.numeric(hour), PM2.5 = as.numeric(PM2.5)) |>
+  filter(!is.na(PM2.5)) |>
+  ggplot () +
+  geom_line (mapping=aes(x=time, y=PM2.5, group=1))
 ```
-
-dataset5_after_cleaning \|\> mutate (PM2.5 = as.numeric(PM2.5), time=as.POSIXct(paste(date, hour), format= "%Y-%m-%d %H:%M")) \|\> filter (format(date, "%m") == "09", as.numeric(format(date, "%d")) \<= 7) \|\> ggplot () + geom_line (mapping=aes(x=time, y=PM2.5))

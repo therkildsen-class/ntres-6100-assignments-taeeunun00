@@ -233,3 +233,14 @@ dataset5_after_cleaning |>
 
 *Hint: uniting the date and hour and parsing the new variable might be
 helpful.*
+
+``` r
+dataset5_after_cleaning |>
+  filter (month(date) == 9, day(date) <= 7) |>
+  mutate (time = as.POSIXct(date) + as.numeric(hour), PM2.5 = as.numeric(PM2.5)) |>
+  filter(!is.na(PM2.5)) |>
+  ggplot () +
+  geom_line (mapping=aes(x=time, y=PM2.5, group=1))
+```
+
+![](assignment_6_files/figure-commonmark/unnamed-chunk-12-1.png)
