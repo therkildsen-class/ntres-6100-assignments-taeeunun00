@@ -236,14 +236,19 @@ dataset5_after_cleaning |>
   labs(x="month", y="MonthlyRainfall")
 ```
 
-    Warning: There was 1 warning in `mutate()`.
-    ℹ In argument: `RAINFALL = as.numeric(RAINFALL)`.
-    Caused by warning:
-    ! NAs introduced by coercion
-
 ![](assignment_6_files/figure-commonmark/unnamed-chunk-11-1.png)
 
 #### **2.6 Plot the per hour variation in PM2.5 in the first week of September with a continuous line, as shown below.**
 
 *Hint: uniting the date and hour and parsing the new variable might be
 helpful.*
+
+``` r
+dataset5_after_cleaning |>
+  mutate (PM2.5 = as.numeric(PM2.5), time=as.POSIXct(paste(date, hour), format= "%Y-%m-%d %H:%M")) |>
+  filter (format(date, "%m") == "09", as.numeric(format(date, "%d")) <= 7) |>
+  ggplot () +
+  geom_line (mapping=aes(x=time, y=PM2.5))
+```
+
+![](assignment_6_files/figure-commonmark/unnamed-chunk-12-1.png)
