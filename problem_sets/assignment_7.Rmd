@@ -126,7 +126,9 @@ q_3b |>
 **3c.** Lastly, use the `q_3b` dataset to contruct a bar plot to show the final vote share under the scenarios of **1)** each state has the number of electoral votes that it currently has, **2)** each state has the number of electoral votes that is exactly proportional to its population size, and **3)** the election result is determined by the popular vote.
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
-
+q_3b |>
+  ggplot() +
+  geom_col(mapping=aes(x=metric, y=value, fill=winner), position="fill")
 ```
 
 ### **Question 4. The election result in 2016 came as a huge surprise to many people, especially given that most polls predicted Clinton would win before the election. Where did the polls get wrong?**

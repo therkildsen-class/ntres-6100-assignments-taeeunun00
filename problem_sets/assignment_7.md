@@ -213,6 +213,21 @@ the number of electoral votes that is exactly proportional to its
 population size, and **3)** the election result is determined by the
 popular vote.
 
+``` r
+q_3b |>
+  ggplot() +
+  geom_col(mapping=aes(x=metric, y=value, fill=winner), position="fill")
+```
+
+![](assignment_7_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+q_3b \|\> ggplot(mapping = aes(x = metric, y = value, fill = winner)) +
+geom_col(position = “fill”) + labs( x = “Scenario”, y = “Vote Share”,
+title = “Comparison of 2016 Election Outcomes by Voting Method” ) +
+scale_x_discrete( labels = c( “electoral_votes” = “Current Electoral
+College”, “population” = “Proportional to Population”, “popular_votes” =
+“Popular Vote” ) ) +
+
 ### **Question 4. The election result in 2016 came as a huge surprise to many people, especially given that most polls predicted Clinton would win before the election. Where did the polls get wrong?**
 
 **4a.** The polling data is stored in the data frame
