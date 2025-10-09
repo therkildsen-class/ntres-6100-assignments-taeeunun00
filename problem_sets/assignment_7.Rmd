@@ -114,7 +114,10 @@ q_3a |>
 **3b.** Combine the `q_2b` dataset with the `q_3a` dataset. Call this new dataset `q_3b`, and print it as shown below.
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+q_3b <- bind_rows(q_2b, q_3a)
 
+q_3b |>
+  kable ()
 ```
 
 **3c.** Lastly, use the `q_3b` dataset to contruct a bar plot to show the final vote share under the scenarios of **1)** each state has the number of electoral votes that it currently has, **2)** each state has the number of electoral votes that is exactly proportional to its population size, and **3)** the election result is determined by the popular vote.
