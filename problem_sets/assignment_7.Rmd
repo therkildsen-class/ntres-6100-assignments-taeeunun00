@@ -140,7 +140,18 @@ q_3b |>
 *Hint: `group_by()` and `slice_max()` can be useful for this question. Check out the help file for `slice_max()` for more info.*
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+q_4a <- polls_us_election_2016 |>
+  filter(pollster == "Ipsos", state != "U.S.") |>
+  group_by(state) |>
+  slice_max(order_by = enddate, n=1) |>
+  ungroup() |>
+  select(state, adjpoll_clinton, adjpoll_trump)
 
+nrow (q_4a)
+  
+head (q_4a) |>
+  kable ()
+  
 ```
 
 **4b.** Combine the `q_4a` dataset with the `q_1b` dataset with a `join` function. The resulting dataset should only have 47 rows. Create the following new variables in this joined dataset.

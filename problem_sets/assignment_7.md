@@ -221,13 +221,6 @@ q_3b |>
 
 ![](assignment_7_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
-q_3b \|\> ggplot(mapping = aes(x = metric, y = value, fill = winner)) +
-geom_col(position = “fill”) + labs( x = “Scenario”, y = “Vote Share”,
-title = “Comparison of 2016 Election Outcomes by Voting Method” ) +
-scale_x_discrete( labels = c( “electoral_votes” = “Current Electoral
-College”, “population” = “Proportional to Population”, “popular_votes” =
-“Popular Vote” ) ) +
-
 ### **Question 4. The election result in 2016 came as a huge surprise to many people, especially given that most polls predicted Clinton would win before the election. Where did the polls get wrong?**
 
 **4a.** The polling data is stored in the data frame
@@ -245,6 +238,33 @@ missing states and DC.*
 
 *Hint: `group_by()` and `slice_max()` can be useful for this question.
 Check out the help file for `slice_max()` for more info.*
+
+``` r
+q_4a <- polls_us_election_2016 |>
+  filter(pollster == "Ipsos", state != "U.S.") |>
+  group_by(state) |>
+  slice_max(order_by = enddate, n=1) |>
+  ungroup() |>
+  select(state, adjpoll_clinton, adjpoll_trump)
+
+nrow (q_4a)
+```
+
+    ## [1] 47
+
+``` r
+head (q_4a) |>
+  kable ()
+```
+
+| state       | adjpoll_clinton | adjpoll_trump |
+|:------------|----------------:|--------------:|
+| Alabama     |        37.54023 |      53.69718 |
+| Arizona     |        41.35774 |      46.17779 |
+| Arkansas    |        37.15339 |      53.28384 |
+| California  |        58.33806 |      31.00473 |
+| Colorado    |        46.00764 |      40.73571 |
+| Connecticut |        48.81810 |      38.87069 |
 
 **4b.** Combine the `q_4a` dataset with the `q_1b` dataset with a `join`
 function. The resulting dataset should only have 47 rows. Create the
