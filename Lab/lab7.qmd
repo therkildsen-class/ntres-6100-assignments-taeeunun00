@@ -1,0 +1,145 @@
+---
+title: "lab7"
+format: gfm
+---
+
+## **Exercise 1: Exploration of the `nycflights13` data (50 min)**
+
+We will start out with some further exploration of the datasets included in the `nycflights13` package that we worked with in Wednesday’s lecture.
+
+Let’s first load in the required packages and data
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+library(tidyverse)
+library(knitr)
+library(nycflights13) 
+
+flights |> head() |> kable()
+```
+
+#### **Question 1: Compute the average delay by destination, then join on the `airports` data frame so you can show the spatial distribution of delays. Here’s an easy way to draw a map of the United States:**
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+library(maps)
+
+average_delays_by_destination <-flights |>
+  group_by(dest) |>
+  summarize(delays = mean(arr_delay, na.rm = TRUE)) |>
+  inner_join(airports, by=c(dest="faa"))
+
+average_delays_by_destination |>
+  ggplot(mapping=aes(lon, lat, color=delays)) +
+  borders("state") +
+  geom_point() +
+  coord_quickmap()
+```
+
+#### **Question 2: Is there a relationship between the age of a plane and its delays?**
+
+Hint: Think about which of our datasets have relevant information and how we need to connect them.
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+plane_cohort <- inner_join (flights, select(planes, tailnum, year), by="tailnum", suffix=c("_flight", "_plane")) |>
+  mutate(age=year_flight - year_plane) |>
+  filter(!is.na(age)) |>
+  mutate(age=if_else(age>25, 25L, age)) |>
+  group_by(age) |>
+  summarize (departure_delay_mean = mean(dep_delay, na.rm = TRUE), arrival_delay_mean = mean(arr_delay, na.rm = TRUE))
+
+#departure delays
+plane_cohort |> 
+  ggplot () +
+  geom_point(mapping=aes(x=age, y=departure_delay_mean)) +
+  scale_x_continuous("Age of plane (years)", breaks = seq(0, 30, by = 10)) +
+  scale_y_continuous("Mean departure delay (minutes)")
+
+#arrival delays 
+plane_cohort |>
+  ggplot() +
+  geom_point(mapping=aes(x=age, y=arrival_delay_mean)) +
+  scale_x_continuous("Age of plane (years)", breaks = seq(0, 30, by = 10)) +
+  scale_y_continuous("Mean arrival delay (minutes)")
+```
+
+#### **Question 3: What weather conditions make it more likely to see a delay?**
+
+Hint: Think about which of our datasets have relevant information and how we need to connect them.
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+weather_condition <- flights |>
+  inner_join(weather, by=c("origin", "year", "month", "day", "hour"))
+
+#precipitation
+weather_condition |>
+  group_by(precip) |>
+  summarize(delay=mean(dep_delay, na.rm=TRUE)) |>
+  ggplot(mapping=aes(x=precip, y=delay)) +
+  geom_line() +
+  geom_point ()
+
+#visibility
+weather_condition |>
+  ungroup() |>
+  mutate(visib_cat=cut_interval(visib, n=10)) |>
+  group_by (visib_cat) |>
+  summarize (dep_delay = mean(dep_delay, na.rm= TRUE))|>
+  ggplot () +
+  geom_point (mapping=aes(x=visib_cat, y=dep_delay))
+```
+
+## Exercise **2: Baby names (45 min)**
+
+Use data tidying, transformation, and visualization to answer the following questions about baby names in breakout rooms
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+library(babynames)
+
+babynames |>
+  head() |>
+  kable()
+```
+
+-   The `babynames` dataset provides the number of children of each sex given each name from 1880 to 2017 in the US. All names with more than 5 uses are included. This dataset is provided by the US Social Security Administration.
+
+-   As a reminder, to get familar with this dataset, you might want to use functions like `View()`, `dim()`, `colnames()` , and `?`.
+
+-   Make sure that you use figures and/or tables to support your answer.
+
+-   We provide some possible solutions for each question, but we highly recommend that you **don’t look at them unless you are really stuck**.
+
+#### **Question 1: What are the 6 most popular boy names and girl names of all time? How has the popularity of each of these names changed over time? This time, use the `slice_max()` function in combination with a `join` function to answer this question.**
+
+*Hint: You can start by finding the 6 most popular names for each sex in one step using `group_by()` and `slice_max()`, and then use a filtering join function to subset the original dataset.*
+
+```{r}
+#| message: false
+#| warning: false
+#| paged-print: false
+top_six_popular_names <- babynames |>
+  group_by(sex, name) |>
+  summarize(total_count = sum(n)) |>
+  ungroup() |>
+  group_by(sex) |>
+  slice_max(order_by=total_count, n=6)
+
+babynames |>
+  semi_join(top_six_popular_names, by = c("sex", "name")) |>
+  ggplot() +
+  geom_line(mapping=aes(x=year, y=prop, group=name, color=sex)) +
+  facet_wrap(~name)
+```
