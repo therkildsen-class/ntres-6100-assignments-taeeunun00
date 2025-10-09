@@ -1,0 +1,29 @@
+---
+title: "Penguin"
+format: html
+---
+
+# Data
+
+This data were collected and made available by Dr. Kristen Gorman and the Palmer Station, Antarctica LTER, and were compiled by Dr. Allison Horst and colleagues.
+
+![Penguins!](maxresdefault.jpg)
+
+```{r}
+#| message: false
+library(palmerpenguins) #install.packages("palmerpenguins")
+library(tidyverse)
+```
+
+## Single Trait Distribution
+
+### Relationship Between Multiple Traits
+
+#### Sexual Dimorphism
+
+
+
+ggplot(data = penguins, mapping = aes(x = bill_depth_mm, y = bill_length_mm)) +
+geom_point(color = "blue") 
+
+

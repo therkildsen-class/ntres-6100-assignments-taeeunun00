@@ -1,0 +1,16 @@
+---
+title: "Penguin"
+output: html_document
+---
+
+# Data
+
+This data were collected and made available by Dr. Kristen Gorman and the Palmer Station, Antarctica LTER, and were compiled by Dr. Allison Horst and colleagues.
+
+![Penguins!](maxresdefault.jpg)
+
+## Single Trait Distribution
+
+### Relationship Between Multiple Traits
+
+#### Sexual Dimorphism
