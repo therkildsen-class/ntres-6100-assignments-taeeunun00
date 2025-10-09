@@ -114,6 +114,9 @@ q_3a |>
 **3b.** Combine the `q_2b` dataset with the `q_3a` dataset. Call this new dataset `q_3b`, and print it as shown below.
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+q_2b <- q_2b |>
+  rename (value = total)
+
 q_3b <- bind_rows(q_2b, q_3a)
 
 q_3b |>
