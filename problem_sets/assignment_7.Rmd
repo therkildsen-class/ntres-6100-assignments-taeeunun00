@@ -183,5 +183,7 @@ head(q_4b) |>
 **4c.** Generate the following plot with the `q_4b` dataset. Use chunk options to adjust the dimensions of the plot to make it longer than the default dimension. Based on this plot, where did the polls get wrong in the 2016 election?
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
-
+q_4b |>
+  ggplot () +
+  geom_point (mapping=aes(x=polling_error, y=state, color=result, size=electoral_votes))
 ```

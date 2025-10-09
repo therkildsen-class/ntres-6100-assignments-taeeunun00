@@ -316,3 +316,11 @@ head(q_4b) |>
 options to adjust the dimensions of the plot to make it longer than the
 default dimension. Based on this plot, where did the polls get wrong in
 the 2016 election?
+
+``` r
+q_4b |>
+  ggplot () +
+  geom_point (mapping=aes(x=polling_error, y=state, color=result, size=electoral_votes))
+```
+
+![](assignment_7_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
