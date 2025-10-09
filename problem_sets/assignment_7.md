@@ -26,9 +26,7 @@ learn more about these datasets.
 
 We will also use [this
 dataset](https://raw.githubusercontent.com/kshaffer/election2016/master/2016ElectionResultsByState.csv)
-to get the exact numbers of votes for question 3.
-
-  
+to get the exact numbers of votes for question 3.  
 
 ### **Question 1. What is the relationship between the population size and the number of electoral votes each state has?**
 
@@ -38,14 +36,58 @@ contains information on population size, and the
 number of electoral votes. Name this new dataset `q_1a`, and show its
 first 6 rows.
 
+``` r
+q_1a <- murders |>
+  left_join(results_us_election_2016, by = "state")
+
+head(q_1a) |>
+  kable()
+```
+
+| state | abb | region | population | total | electoral_votes | clinton | trump | johnson | stein | mcmullin | others |
+|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Alabama | AL | South | 4779736 | 135 | 9 | 34.35795 | 62.08309 | 2.094169 | 0.4422682 | 0.0000000 | 1.0225246 |
+| Alaska | AK | West | 710231 | 19 | 3 | 36.55087 | 51.28151 | 5.877128 | 1.8000176 | 0.0000000 | 4.4904710 |
+| Arizona | AZ | West | 6392017 | 232 | 11 | 44.58042 | 48.08314 | 4.082188 | 1.3185997 | 0.6699155 | 1.2657329 |
+| Arkansas | AR | South | 2915918 | 93 | 6 | 33.65190 | 60.57191 | 2.648769 | 0.8378174 | 1.1653206 | 1.1242832 |
+| California | CA | West | 37253956 | 1257 | 55 | 61.72640 | 31.61711 | 3.374092 | 1.9649200 | 0.2792070 | 1.0382753 |
+| Colorado | CO | West | 5029196 | 65 | 9 | 48.15651 | 43.25098 | 5.183748 | 1.3825031 | 1.0400874 | 0.9861714 |
+
 **1b.** Add a new variable in the `q_1a` dataset to indicate which
 candidate won in each state, and remove the columns `abb`, `region`, and
 `total`. Name this new dataset `q_1b`, and show its first 6 rows.
+
+``` r
+q_1b <- q_1a |>
+  mutate(winner = if_else(clinton > trump, "clinton", "trump")) |>
+  select(-abb, -region, -total)
+
+head(q_1b) |>
+  kable()
+```
+
+| state | population | electoral_votes | clinton | trump | johnson | stein | mcmullin | others | winner |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|:---|
+| Alabama | 4779736 | 9 | 34.35795 | 62.08309 | 2.094169 | 0.4422682 | 0.0000000 | 1.0225246 | trump |
+| Alaska | 710231 | 3 | 36.55087 | 51.28151 | 5.877128 | 1.8000176 | 0.0000000 | 4.4904710 | trump |
+| Arizona | 6392017 | 11 | 44.58042 | 48.08314 | 4.082188 | 1.3185997 | 0.6699155 | 1.2657329 | trump |
+| Arkansas | 2915918 | 6 | 33.65190 | 60.57191 | 2.648769 | 0.8378174 | 1.1653206 | 1.1242832 | trump |
+| California | 37253956 | 55 | 61.72640 | 31.61711 | 3.374092 | 1.9649200 | 0.2792070 | 1.0382753 | clinton |
+| Colorado | 5029196 | 9 | 48.15651 | 43.25098 | 5.183748 | 1.3825031 | 1.0400874 | 0.9861714 | clinton |
 
 **1c.** Using the `q_1b` dataset, plot the relationship between
 population size and number of electoral votes. Use color to indicate who
 won the state. Fit a straight line to the data, set its color to black,
 size to 0.1, and turn off its confidence interval.
+
+``` r
+q_1b |>
+  ggplot(mapping=aes(x=population, y=electoral_votes)) +
+  geom_point(aes(color=winner)) +
+  geom_smooth(method="lm", se=FALSE, color="black", size=0.1)
+```
+
+![](assignment_7_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ### **Question 2. Would the election result be any different if the number of electoral votes is exactly proportional to a state’s population size?**
 
@@ -53,9 +95,42 @@ size to 0.1, and turn off its confidence interval.
 `population` and `electoral_votes` columns are turned into rows as shown
 below. Name this new dataset `q_2a`, and show its first 6 rows.
 
+``` r
+q_2a <- q_1b |>
+  pivot_longer (cols=c(population, electoral_votes), names_to = "metric", values_to = "value")
+
+head(q_2a) |>
+  kable()
+```
+
+| state | clinton | trump | johnson | stein | mcmullin | others | winner | metric | value |
+|:---|---:|---:|---:|---:|---:|---:|:---|:---|---:|
+| Alabama | 34.35795 | 62.08309 | 2.094169 | 0.4422682 | 0.0000000 | 1.022525 | trump | population | 4779736 |
+| Alabama | 34.35795 | 62.08309 | 2.094169 | 0.4422682 | 0.0000000 | 1.022525 | trump | electoral_votes | 9 |
+| Alaska | 36.55087 | 51.28151 | 5.877128 | 1.8000176 | 0.0000000 | 4.490471 | trump | population | 710231 |
+| Alaska | 36.55087 | 51.28151 | 5.877128 | 1.8000176 | 0.0000000 | 4.490471 | trump | electoral_votes | 3 |
+| Arizona | 44.58042 | 48.08314 | 4.082188 | 1.3185997 | 0.6699155 | 1.265733 | trump | population | 6392017 |
+| Arizona | 44.58042 | 48.08314 | 4.082188 | 1.3185997 | 0.6699155 | 1.265733 | trump | electoral_votes | 11 |
+
 **2b.** Then, sum up the number of electoral votes and population size
 across all states for each candidate. Name this new dataset `q_2b`, and
 print it as shown below.
+
+``` r
+q_2b <- q_2a |>
+  group_by(metric, winner) |>
+  summarize(total = sum(value)) |>
+  ungroup()
+
+q_2b |> kable()
+```
+
+| metric          | winner  |     total |
+|:----------------|:--------|----------:|
+| electoral_votes | clinton |       231 |
+| electoral_votes | trump   |       302 |
+| population      | clinton | 134982448 |
+| population      | trump   | 174881780 |
 
 **2c.** Use the `q_2b` dataset to contruct a bar plot to show the final
 electoral vote share under the scenarios of **1)** each state has the
@@ -65,6 +140,15 @@ population size. Here, assume that for each state, the winner will take
 all its electoral votes.
 
 *Hint: `geom_col(position = "fill")` might be helpful.*
+
+``` r
+q_2b |>
+  ggplot (mapping=aes(x=metric, y=total, fill=winner)) +
+  geom_col (position = "fill") +
+  labs (y="value")
+```
+
+![](assignment_7_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ### **Question 3. What if the election was determined by popular votes?**
 
@@ -77,6 +161,27 @@ below. Name this new dataset `q_3a`, and print it.
 `others` as shown below.*
 
 *Hint: `pivot_longer()` may be useful in here.*
+
+``` r
+q_3a <- read_csv("https://raw.githubusercontent.com/kshaffer/election2016/master/2016ElectionResultsByState.csv")
+
+q_3a <- q_3a |>
+  pivot_longer(cols = c(clintonVotes, trumpVotes, othersVotes), names_to = "winner", values_to="value") |>
+  mutate(winner = case_when (winner == "clintonVotes"~ "clinton", winner =="trumpVotes"~"trump", winner =="othersVotes"~"others")) |>
+  group_by(winner) |>
+  summarize(value=sum(value)) |>
+  mutate(metric="popular_votes") |>
+  select(metric, winner, value)
+
+q_3a |>
+  kable ()
+```
+
+| metric        | winner  |    value |
+|:--------------|:--------|---------:|
+| popular_votes | clinton | 65125640 |
+| popular_votes | others  |   541623 |
+| popular_votes | trump   | 62616675 |
 
 **3b.** Combine the `q_2b` dataset with the `q_3a` dataset. Call this
 new dataset `q_3b`, and print it as shown below.
