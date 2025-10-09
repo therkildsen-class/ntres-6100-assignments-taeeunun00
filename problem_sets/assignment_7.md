@@ -287,6 +287,31 @@ Keep only the columns `state`, `polling_error`, `result`,
 `electoral_votes`. Name the new dataset `q_4b` and show its first 6
 rows.
 
+``` r
+q_4b <- q_4a |>
+  left_join(q_1b, by = "state") |>
+  mutate (polling_margin=adjpoll_clinton - adjpoll_trump, actual_margin = clinton - trump, polling_error = polling_margin - actual_margin, predicted_winner = if_else(adjpoll_clinton > adjpoll_trump, "clinton", "trump"), result = if_else(winner == predicted_winner, "correct prediction", str_c("unexpected", winner, "win"))) |>
+  select(state, polling_error, result, electoral_votes)
+  
+nrow(q_4b)
+```
+
+    ## [1] 47
+
+``` r
+head(q_4b) |>
+  kable ()
+```
+
+| state       | polling_error | result             | electoral_votes |
+|:------------|--------------:|:-------------------|----------------:|
+| Alabama     |    11.5681966 | correct prediction |               9 |
+| Arizona     |    -1.3173239 | correct prediction |              11 |
+| Arkansas    |    10.7895518 | correct prediction |               6 |
+| California  |    -2.7759631 | correct prediction |              55 |
+| Colorado    |     0.3663946 | correct prediction |               9 |
+| Connecticut |    -3.6919767 | correct prediction |               7 |
+
 **4c.** Generate the following plot with the `q_4b` dataset. Use chunk
 options to adjust the dimensions of the plot to make it longer than the
 default dimension. Based on this plot, where did the polls get wrong in

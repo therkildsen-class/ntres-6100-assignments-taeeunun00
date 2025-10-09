@@ -169,7 +169,15 @@ head (q_4a) |>
 Keep only the columns `state`, `polling_error`, `result`, `electoral_votes`. Name the new dataset `q_4b` and show its first 6 rows.
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+q_4b <- q_4a |>
+  left_join(q_1b, by = "state") |>
+  mutate (polling_margin=adjpoll_clinton - adjpoll_trump, actual_margin = clinton - trump, polling_error = polling_margin - actual_margin, predicted_winner = if_else(adjpoll_clinton > adjpoll_trump, "clinton", "trump"), result = if_else(winner == predicted_winner, "correct prediction", str_c("unexpected", winner, "win"))) |>
+  select(state, polling_error, result, electoral_votes)
+  
+nrow(q_4b)
 
+head(q_4b) |>
+  kable ()
 ```
 
 **4c.** Generate the following plot with the `q_4b` dataset. Use chunk options to adjust the dimensions of the plot to make it longer than the default dimension. Based on this plot, where did the polls get wrong in the 2016 election?
