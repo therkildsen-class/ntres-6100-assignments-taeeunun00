@@ -171,7 +171,8 @@ q_3a <- q_3a |>
   group_by(winner) |>
   summarize(value=sum(value)) |>
   mutate(metric="popular_votes") |>
-  select(metric, winner, value)
+  select(metric, winner, value) |>
+  arrange(match(winner, c("clinton", "trump", "others")))
 
 q_3a |>
   kable ()
@@ -180,8 +181,8 @@ q_3a |>
 | metric        | winner  |    value |
 |:--------------|:--------|---------:|
 | popular_votes | clinton | 65125640 |
-| popular_votes | others  |  7054974 |
 | popular_votes | trump   | 62616675 |
+| popular_votes | others  |  7054974 |
 
 **3b.** Combine the `q_2b` dataset with the `q_3a` dataset. Call this
 new dataset `q_3b`, and print it as shown below.
@@ -203,8 +204,8 @@ q_3b |>
 | population      | clinton | 134982448 |
 | population      | trump   | 174881780 |
 | popular_votes   | clinton |  65125640 |
-| popular_votes   | others  |   7054974 |
 | popular_votes   | trump   |  62616675 |
+| popular_votes   | others  |   7054974 |
 
 **3c.** Lastly, use the `q_3b` dataset to contruct a bar plot to show
 the final vote share under the scenarios of **1)** each state has the
