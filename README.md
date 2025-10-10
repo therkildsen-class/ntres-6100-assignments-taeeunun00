@@ -39,3 +39,5 @@ Assignment 4: Uploaded to the ‘problem_sets’ folder
 Assignment 5: Uploaded to the ‘problem_sets’ folder
 
 Assignment 6: Uploaded to the ‘problem_sets’ folder
+
+Assignment 7: Uploaded to the ‘problem_sets’ folder
