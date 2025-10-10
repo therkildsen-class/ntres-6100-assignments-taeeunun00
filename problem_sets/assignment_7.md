@@ -166,8 +166,8 @@ below. Name this new dataset `q_3a`, and print it.
 q_3a <- read_csv("https://raw.githubusercontent.com/kshaffer/election2016/master/2016ElectionResultsByState.csv")
 
 q_3a <- q_3a |>
-  pivot_longer(cols = c(clintonVotes, trumpVotes, othersVotes), names_to = "winner", values_to="value") |>
-  mutate(winner = case_when (winner == "clintonVotes"~ "clinton", winner =="trumpVotes"~"trump", winner =="othersVotes"~"others")) |>
+  pivot_longer(cols = c(clintonVotes, trumpVotes, othersVotes, johnsonVotes, steinVotes, mcmullinVotes), names_to = "winner", values_to="value") |>
+  mutate(winner = case_when (winner == "clintonVotes"~ "clinton", winner =="trumpVotes"~"trump", winner %in% c("othersVotes", "johnsonVotes", "steinVotes", "mcmullinVotes")~"others")) |>
   group_by(winner) |>
   summarize(value=sum(value)) |>
   mutate(metric="popular_votes") |>
@@ -180,7 +180,7 @@ q_3a |>
 | metric        | winner  |    value |
 |:--------------|:--------|---------:|
 | popular_votes | clinton | 65125640 |
-| popular_votes | others  |   541623 |
+| popular_votes | others  |  7054974 |
 | popular_votes | trump   | 62616675 |
 
 **3b.** Combine the `q_2b` dataset with the `q_3a` dataset. Call this
@@ -203,7 +203,7 @@ q_3b |>
 | population      | clinton | 134982448 |
 | population      | trump   | 174881780 |
 | popular_votes   | clinton |  65125640 |
-| popular_votes   | others  |    541623 |
+| popular_votes   | others  |   7054974 |
 | popular_votes   | trump   |  62616675 |
 
 **3c.** Lastly, use the `q_3b` dataset to contruct a bar plot to show

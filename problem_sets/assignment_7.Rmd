@@ -100,8 +100,8 @@ q_2b |>
 q_3a <- read_csv("https://raw.githubusercontent.com/kshaffer/election2016/master/2016ElectionResultsByState.csv")
 
 q_3a <- q_3a |>
-  pivot_longer(cols = c(clintonVotes, trumpVotes, othersVotes), names_to = "winner", values_to="value") |>
-  mutate(winner = case_when (winner == "clintonVotes"~ "clinton", winner =="trumpVotes"~"trump", winner =="othersVotes"~"others")) |>
+  pivot_longer(cols = c(clintonVotes, trumpVotes, othersVotes, johnsonVotes, steinVotes, mcmullinVotes), names_to = "winner", values_to="value") |>
+  mutate(winner = case_when (winner == "clintonVotes"~ "clinton", winner =="trumpVotes"~"trump", winner %in% c("othersVotes", "johnsonVotes", "steinVotes", "mcmullinVotes")~"others")) |>
   group_by(winner) |>
   summarize(value=sum(value)) |>
   mutate(metric="popular_votes") |>
