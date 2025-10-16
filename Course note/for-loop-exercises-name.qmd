@@ -1,0 +1,128 @@
+---
+title: "`for loop` exercises"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<br>
+
+## Gapminder data
+
+Today, we'll be using a subset of the [Gapminder dataset](https://www.gapminder.org/tools/?from=world#$chart-type=bubbles), which represents the health and wealth of nations. It was pioneered by [Hans Rosling](https://www.ted.com/speakers/hans_rosling), who is famous for describing the prosperity of nations over time through famines, wars and other historic events with this beautiful data visualization in his [2006 TED Talk: The best stats you've ever seen](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen). 
+ 
+
+INSERT THE IMAGE FOUND AT THIS URL: https://s3-eu-west-1.amazonaws.com/static.gapminder.org/GapminderMedia/wp-uploads/20180914115336/Screen-Shot-2018-09-14-at-12.51.17-1024x557.png
+
+<br>
+<br>
+
+We will use a subset of the gapminder data included in the R package `gapminder`. So first we need to install that package and load it, along with the tidyverse. Then have a look at the data in `gapminder`
+
+```{r, eval = TRUE, message = FALSE}
+
+library(tidyverse)
+library(gapminder) #install.packages("gapminder")
+
+gapminder
+
+```
+
+<br>
+
+Here is the for loop we created together to save plots of gdp_per_cap vs. year for all countries in the dataset:
+
+```{r, eval = TRUE, message = FALSE}
+
+# Clean up variable names
+gapminder <- gapminder |> 
+  rename("life_exp" = lifeExp, "gdp_per_cap" = gdpPercap)
+
+dir.create("gap_figs") 
+
+## create a list of countries
+country_list <- unique(gapminder$country) # ?unique() returns the unique values
+
+for (cntry in country_list) {
+  
+  ## filter the country to plot
+  gap_to_plot <- gapminder |>
+    filter(country == cntry)
+  
+  ## plot
+  my_plot <- ggplot(data = gap_to_plot, aes(x = year, y = gdp_per_cap)) + 
+    geom_point() +
+    ## add title and save
+    labs(title = str_c(cntry, "GDP per capita", sep = " "))
+  
+  ## add the gap_figs/ folder
+  ggsave(filename = str_c("gap_figs/", cntry, "_gdp_per_cap.png", sep = ""), plot = my_plot)
+} 
+
+```
+
+This code has been copied to the code chunk below.
+
+<br>
+<br>
+
+### Your task:
+
+1. Modify our `for` loop so that it: 
+    - loops through countries in Europe only
+    - plots the product of gdpPercap and population size per year (should approximate the total GDP) instead of the gdpPercap
+    - saves them to a new subfolder inside the (recreated) gap_figs folder called "Europe".
+1. Sync to GitHub
+
+<br>
+
+```{r, eval = FALSE}
+
+cntry = "Belgium"
+country_list <- c("Albania", "Canada", "Spain")
+country_list = unique(gapminder$country)
+length(country_list)
+
+dir.create("figures") 
+
+for (cntry in country_list) {
+  
+gap_to_plot <- gapminder |>
+  filter(country == cntry)
+
+my_plot <- ggplot(data = gap_to_plot, mapping = aes(x = year, y = gdpPercap)) + 
+  geom_point() +
+  labs(title = str_c(cntry, "GDP per capita", sep = ""))
+
+ggsave(filename = str_c("figures/", cntry, "_gdp_per_cap.png", sep = ""), plot = my_plot)
+} 
+
+
+```
+
+```{r}
+dir.create("gap_figs", showWarnings = FALSE)             
+dir.create("gap_figs/Europe", showWarnings = FALSE)  
+
+country_list <- gapminder |>
+  filter(continent == "Europe") |>
+  pull(country) |>
+  unique()
+
+for (cntry in country_list) {
+  gap_to_plot <- gapminder |>
+    filter(country == cntry) |>
+    mutate(total_gdp = gdp_per_cap * pop) 
+  
+  my_plot <- ggplot(gap_to_plot, aes(x = year, y = total_gdp)) +
+    geom_point() +
+    labs(title = str_c(cntry, " Total GDP", sep = " "), y = "Total GDP")
+  
+  ggsave(
+    filename = str_c("gap_figs/Europe/", cntry, "_total_gdp.png", sep = ""), plot = my_plot)
+} 
+```
+
+<br> 
