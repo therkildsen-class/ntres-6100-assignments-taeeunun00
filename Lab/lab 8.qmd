@@ -1,0 +1,122 @@
+---
+title: "Lab 8"
+format: html
+---
+
+```{r}
+library(tidyverse)
+```
+
+## **Exercise 1: Optimize for loops (40 minutes)**
+
+Design an experiment to systematically compare the computational efficiency between the two approaches. Which approach is more efficient, and why might that be?
+
+**Hints**:
+
+-   the `system.time()` function may be helpful
+
+-   try to compare the runtime of the two approaches with different numbers iterations
+
+```{r}
+iterations <- (1:5)*5000
+approach_1 <- vector("double", length(iterations))
+approach_2 <- vector("double", length(iterations))
+
+for (i in 1:length(iterations)){
+  n <- iterations[i]
+  vector_of_1 <- NULL
+  approach_1[i] <- system.time(for(j in 1:n){
+    vector_of_1 <- c(vector_of_1, 1)
+  }
+  )[3]
+  vector_of_1 <- vector(mode="double", length=n)
+  approach_2[i] <- system.time(for(k in 1:n){
+    vector_of_1[j] <- 1
+  }
+  )[3]
+}
+
+tibble(iterations, approach_1, approach_2) |>
+  pivot_longer(2:3, names_to = "approach", values_to ="runtime") |>
+  ggplot() +
+  geom_line(mapping=aes(x=iterations, y=runtime, color=approach))
+```
+
+## **Exercise 2: Infinite monkey theorem and Markov Chain Monte Carlo simulation (50 minutes)**
+
+#### **2.1**
+
+**Write a loop that generates a random paragraph using MCMC simulation.** By that I mean, a loop that randomly generates sequences of letters following the rules below:
+
+-   use R’s built-in vector of lower-case letters, a hidden object called `letters`, to which you will need to add a single space, a comma and an exclamation point. Don’t use any other characters
+
+-   force the first letter to be an upper case letter (use a hidden object called `LETTERS`)
+
+-   force commas to be followed by a blank space and a random lower case letter (e.g. `", a"`)
+
+-   force exclamation points to be followed by a blank space and an upper case letter (e.g. `"! B"`)
+
+-   avoid double spaces or commas and exclamation points after spaces (e.g. `"  "`, `" !"`)
+
+-   allow the maximum amount of randomness that you can have while following the rules above
+
+-   generate a single string as the result in the end, not a vector of strings. For example, you want `“apple!”` not `c(“a”, “p”, “p”, “l”, “e”, “!”)` *(Hint: the `paste0` function or the `str_c` function may be handy)*
+
+In theory, if you were to run the program for a very long time (with some extra characters added to the pool), you will almost surely end up with the entire works of Shakespear—or any other book you can think of (see <https://en.wikipedia.org/wiki/Infinite_monkey_theorem>).
+
+Actually, that would be the case even without our grammatical corrections. But those are there to make the output more fun, and more challenging to code.
+
+One way to proceed with slightly more complicated loops like this is first to write it in the way that seems most natural to you. Then go back, test it, and optimize it.
+
+**Hints:**
+
+-   you can start by implementing one rule at a time in your preferred order
+
+-   you can either use a for loop or a while loop (see <https://r4ds.had.co.nz/iteration.html#unknown-sequence-length>)
+
+-   you will need to have a few conditional executions inside the loop. Think carefully about the ordering of these
+
+-   you will need to store at least the previous one character as an object
+
+-   you can add one character at a time in each iteration. You will likely need to keep track of the previous two characters in this case
+
+-   alternatively, you may want to consider adding two characters at a time in some iterations, and either adding a blank in the next iteration (i.e. `""`) in the case of a for loop or skipping the next iteration entirely in the case of a while loop
+
+-   the following functions may be helpful: `sample()`, `str_c()`, `str_count()`
+
+```{r}
+set <- c(letters, " ", ",", "!")
+i <- 1
+n <- 1000
+set.seed(42)
+for(i in 1:n){
+  if(i==1){
+    current_letter <- sample(LETTERS, 1)
+    hysterical_monkey <- current_letter
+  } else {
+    if(last_letter == "!" & i !=n){
+      current_letter <- str_c(" ", sample(LETTERS, 1))
+    } else if (last_letter =="," & i !=n){
+      current_letter <- str_c(" ", sample(letters, 1))
+    } else if (last_letter %in% c(",", "!") & i==n){
+      current_letter <- " "
+    } else if (last_letter == " "){
+      current_letter <- sample(letters, 1)
+    } else if (str_count(last_letter) == 2){
+      current_letter <- ""
+    } else {
+      current_letter <- sample (set, 1)
+    }
+    hysterical_monkey <- str_c(hysterical_monkey, current_letter)
+  }
+  last_letter <- current_letter
+}
+
+hysterical_monkey
+```
+
+#### **2.2 Building on the last question, come up with one additional rule and apply it to your random paragraph generator.**
+
+```{r}
+
+```
