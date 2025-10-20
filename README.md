@@ -18,7 +18,7 @@ Please use the following table to grade the student's assignment:
 |      4      |        X        |                     |               |
 |      5      |       X          |                     |               |
 |      6      |       X          |                     |               |
-|      7      |                 |                     |               |
+|      7      |       X          |                     |               |
 |      8      |                 |                     |               |
 |      9      |                 |                     |               |
 
