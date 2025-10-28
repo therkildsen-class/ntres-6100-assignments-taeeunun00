@@ -16,10 +16,10 @@ Please use the following table to grade the student's assignment:
 |      2      |        X        |                     |               |
 |      3      |        X        |                     |               |
 |      4      |        X        |                     |               |
-|      5      |       X          |                     |               |
-|      6      |       X          |                     |               |
-|      7      |       X          |                     |               |
-|      8      |                 |                     |       X        |
+|      5      |        X        |                     |               |
+|      6      |        X        |                     |               |
+|      7      |        X        |                     |               |
+|      8      |                 |                     |       X       |
 |      9      |                 |                     |               |
 
 Assignment 1: Uploaded to the ‘problem_sets’ folder
