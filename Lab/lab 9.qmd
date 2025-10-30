@@ -1,0 +1,55 @@
+---
+title: "lab 9"
+format: html
+---
+
+```{r}
+library(tidyverse)
+```
+
+#### **1.1 Write a function, `dna_or_rna(sequence)`, that determines if a sequence of base pairs is DNA, RNA, or if it is not possible to tell given the sequence provided.**
+
+-   Since all the function will know about the material is the sequence, the only way to tell the difference between DNA and RNA is that RNA has the base Uracil (`"u"`) instead of the base Thymine (`"t"`).
+
+-   Have the function return one of three outputs: “DNA”, “RNA”, or “unknown”. Then run the following three lines of code:
+
+`dna_or_rna("attggc")`
+
+`dna_or_rna("gccaau")`
+
+`dna_or_rna("ccagac")`
+
+`dna_or_rna("tgcacug")`
+
+Hint: the `str_split` function might be helpful.
+
+```{r} function(sequence){}
+     base <- strsplit(sequence, pattern = "") |>
+       unlist() |>
+       unique()
+     if (all(bases %in% c("a", "t", "g", "c")) & "t" %in% bases){
+       return("DNA")
+     } else if (all(bases %in% c("a", "u", "g", "c")) & "u" %in% bases){
+       return("RNA")
+     } else {
+       return("unknown")
+     }
+}
+
+```
+
+```         
+## function(sequence){
+##   bases <- str_split(sequence, pattern = "") %>%
+##     unlist() %>%
+##     unique()
+##   if (all(bases %in% c("a", "t", "g", "c")) & "t" %in% bases){
+##     return("DNA")
+##   } else if (all(bases %in% c("a", "u", "g", "c")) & "u" %in% bases){
+##     return("RNA")
+##   } else {
+##     return("unknown")
+##   }
+## }
+## <bytecode: 0x1359d40a0>
+```
